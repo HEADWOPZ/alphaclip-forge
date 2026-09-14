@@ -123,7 +123,18 @@ def cues_to_srt(cues: list[Cue], width: int = 28) -> str:
 
 
 def _ass_escape(text: str) -> str:
-    return text.replace("\\", r"\\").replace("{", r"\{").replace("}", r"\}")
+    """Escape ASS specials. Spaces become hard-spaces so libass cannot collapse them."""
+    return (
+        text.replace("\\", r"\\")
+        .replace("{", r"\{")
+        .replace("}", r"\}")
+        .replace(" ", r"\h")
+    )
+
+
+def _ass_multiline(text: str, width: int) -> str:
+    lines = wrap_text(text, width=width)
+    return r"\N".join(_ass_escape(line) for line in lines if line)
 
 
 def cues_to_ass(
@@ -136,18 +147,17 @@ def cues_to_ass(
     """Styled 1080x1920 ASS: CTA header, captions, disclaimer footer."""
     caption_lines: list[str] = []
     for cue in cues:
-        wrapped = wrap_text(cue.text, width=width)
-        if not wrapped:
+        body = _ass_multiline(cue.text, width=width)
+        if not body:
             continue
-        body = _ass_escape(r"\N".join(wrapped))
         caption_lines.append(
             f"Dialogue: 0,{ass_timestamp(cue.start)},{ass_timestamp(cue.end)},"
             f"Caption,,0,0,0,,{body}"
         )
 
     end = ass_timestamp(max(clip_duration, 0.2))
-    cta = _ass_escape("  " + preset.cta + "  ")
-    disclaimer = _ass_escape(preset.disclaimer)
+    cta = _ass_multiline(preset.cta, width=36)
+    disclaimer = _ass_multiline(preset.disclaimer, width=48)
     header = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: 1080
@@ -179,6 +189,25 @@ def write_srt(path: Path, content: str) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
     return path
+
+
+def drawtext_escape(text: str) -> str:
+    """Escape a single line for ffmpeg drawtext=text='…'.
+
+    Apostrophes become a typographic quote so they cannot break the filter
+    graph's single-quoted text= argument.
+    """
+    return (
+        text.replace("'", "’")
+        .replace("\\", r"\\\\")
+        .replace(":", r"\:")
+        .replace("%", r"\%")
+    )
+
+
+def drawtext_multiline(text: str, width: int) -> str:
+    lines = wrap_text(text, width=width)
+    return r"\n".join(drawtext_escape(line) for line in lines if line)
 
 
 def build_clip_captions(

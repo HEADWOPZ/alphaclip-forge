@@ -5,6 +5,8 @@ from alphaclip.captions import (
     build_clip_captions,
     cues_to_ass,
     cues_to_srt,
+    drawtext_escape,
+    drawtext_multiline,
     explode_cues,
     shift_cues_to_clip,
     srt_timestamp,
@@ -70,10 +72,20 @@ def test_ass_contains_cta_disclaimer_and_caption(trench):
     assert "Style: Caption" in ass
     assert "Style: CTA" in ass
     assert "Style: Disclaimer" in ass
-    assert trench.cta.split()[0] in ass
-    assert "Not financial advice" in ass
-    assert "The whale got wrecked" in ass
-    assert "0:00:00.00,0:00:10.00,CTA" in ass or "CTA,," in ass
+    assert "Follow" in ass
+    assert r"Not\hfinancial\hadvice" in ass
+    assert "whale" in ass
+    assert r"\N" in ass
+    assert r"\\N" not in ass
+    assert "CTA,," in ass
+
+
+def test_drawtext_keeps_spaces_and_escapes():
+    assert "Follow for daily" in drawtext_escape("Follow for daily")
+    assert r"\:" in drawtext_escape("watch: this")
+    multi = drawtext_multiline("Follow for daily trench recaps — next clip in the stack.", width=28)
+    assert "Follow for" in multi
+    assert r"\n" in multi
 
 
 def test_build_clip_captions_from_demo(demo_segments, trench):

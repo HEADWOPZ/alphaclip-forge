@@ -12,11 +12,11 @@ DEFAULT_WORK_ROOT = Path(os.environ.get("ALPHACLIP_WORK", REPO_ROOT / "var"))
 VERTICAL_WIDTH = 1080
 VERTICAL_HEIGHT = 1920
 
-# Caption burn prefers Inter (present on this image) then Liberation Sans.
+# Prefer Liberation / DejaVu — some Inter builds on this image collapse space glyphs.
 FONT_CANDIDATES = [
-    Path("/usr/share/fonts/truetype/macos/Inter-Bold.ttf"),
     Path("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"),
     Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"),
+    Path("/usr/share/fonts/truetype/macos/Inter-Bold.ttf"),
 ]
 
 
