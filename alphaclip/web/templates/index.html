@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AlphaClip Forge</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <div class="slag"></div>
+  <header class="top">
+    <div class="brand">
+      <span class="anvil" aria-hidden="true"></span>
+      <div>
+        <p class="eyebrow">HEADWOPZ · KLM</p>
+        <h1>AlphaClip Forge</h1>
+      </div>
+    </div>
+    <p class="lede">Turn a YouTube, X, Loom, or local crypto source into captioned 9:16 Shorts — hooks, CTAs, and a disclaimer baked in.</p>
+  </header>
+
+  <main>
+    <form id="forge-form" class="panel">
+      <label class="field">
+        <span>Source URL</span>
+        <input type="url" name="url" id="url" placeholder="https://youtube.com/watch?v=…  ·  x.com/…  ·  loom.com/share/…" />
+      </label>
+
+      <label class="field">
+        <span>Or local file</span>
+        <input type="file" name="upload" id="upload" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm,.mkv" />
+      </label>
+
+      <fieldset class="presets">
+        <legend>Preset</legend>
+        {% for preset in presets %}
+        <label class="preset">
+          <input type="radio" name="preset" value="{{ preset.id }}" {% if loop.first %}checked{% endif %} />
+          <span>
+            <strong>{{ preset.name }}</strong>
+            <em>{{ preset.description }}</em>
+          </span>
+        </label>
+        {% endfor %}
+      </fieldset>
+
+      <label class="check">
+        <input type="checkbox" name="mock" id="mock" checked />
+        <span>Mock transcript (demo fixture / offline — no Whisper, no GPU)</span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" name="rights" id="rights" required />
+        <span>I own this source or have a license to clip it. AlphaClip does not grant copyright.</span>
+      </label>
+
+      <div class="actions">
+        <button type="submit" id="submit">Forge clips</button>
+        <p class="hint">v{{ version }} · CPU-only · ffmpeg + captions</p>
+      </div>
+    </form>
+
+    <aside class="panel log-panel">
+      <h2>Run</h2>
+      <ol id="log" class="log">
+        <li class="idle">Idle. Paste a URL or leave mock on to forge the bundled trench tape.</li>
+      </ol>
+      <div id="result" hidden></div>
+    </aside>
+  </main>
+
+  <footer>
+    <p>Not financial advice. Crypto is volatile. Captions are machine-generated.</p>
+    <p>You must have rights to every source you ingest. No auto-posting in v1 — schedule hooks are dry-run unless you pass keys and <code>--live</code>.</p>
+  </footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

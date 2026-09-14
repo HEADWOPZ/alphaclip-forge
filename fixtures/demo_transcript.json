@@ -1,0 +1,47 @@
+{
+  "source": "fixtures/demo.mp4",
+  "language": "en",
+  "engine": "mock",
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 4.0,
+      "text": "If you slept on this airdrop you missed a generational bag in the trenches."
+    },
+    {
+      "start": 4.0,
+      "end": 8.0,
+      "text": "Three liquidations cascaded in twelve minutes. The whale got wrecked on 40x leverage."
+    },
+    {
+      "start": 8.0,
+      "end": 12.0,
+      "text": "Don't fade this tape. The runner printed while funding flipped negative."
+    },
+    {
+      "start": 12.0,
+      "end": 16.2,
+      "text": "Here's how the protocol actually works. Deposits go into a vault, then the AMM."
+    },
+    {
+      "start": 16.2,
+      "end": 20.4,
+      "text": "The oracle updates every eight seconds. Restaking can slash if a validator lies."
+    },
+    {
+      "start": 20.4,
+      "end": 24.4,
+      "text": "TVL is just idle liquidity. Read the docs before you chase the yield number."
+    },
+    {
+      "start": 24.4,
+      "end": 28.2,
+      "text": "This drain trick is everywhere. An unlimited approval and you are cooked."
+    },
+    {
+      "start": 28.2,
+      "end": 32.0,
+      "text": "Revoke that spender. Hardware wallet. Never type your seed phrase into a site."
+    }
+  ]
+}
